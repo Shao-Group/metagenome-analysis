@@ -1,10 +1,20 @@
-# Overview
+# Benchmarking and analysis different de novo Metagenome Assemblers for long-read data
 
-## Benchmarking and analysis different de novo Metagenome Assemblers for long-read data
 
-This project benchmarks different de novo metagenome assemblers to assess the
-performance and limitations with respect to long-read metagenome data (both
-synthetic and real). 
+**Contents**
+
+1. [Overview](#1-overview)
+2. [Long-read Metagenome Assembly](#2-long-read-metagenome-assembly)
+    1.  [Quality Control](#21--quality-control)
+    2.  [Assembly](#22--assembly)
+    3.  [Assessment](#23--assessment)
+
+
+## 1. Overview
+
+The following assemblers are benchmarked:
+
+This project benchmarks different de novo metagenome assemblers to assess the performance and limitations with respect to long-read metagenome data (both synthetic and real).
 
 The following assemblers are benchmarked:
 
@@ -36,5 +46,58 @@ The tools were evaluated using the following public datasets:
 | humanV2          | SRR15275210 | 15.2        | 9.6                   | 40             | Human gut, pool of 4 vegan samples    |
 | chicken          | SRR15214153 | 33.6        | 17.6                  | 30             | Chicken gut microbiome                           |
   
+
+## 2. Long-read Metagenome Assembly
+
+
+### 2.1 Quality Control
+
+### 2.2 Assembly
+Here, we will be running all 4 assemblers (metaFlye, hiCanu, hifiasm-meta and Raven).
+
+### 2.2.1 metaFlye Assembly
+Command for running flye assembly:
+
+```
+./flye --pacbio-hifi /path/to/data/ecoli.fastq \
+  --plasmids \
+  --meta \ 
+  --debug \ 
+  --out-dir /path/to/output/ecoli_hifi/
+``` 
+```
+Usage: flye 
+
+--pacbio-hifi  for PacBio HiFi reads 
+--plasmids   
+--meta         for metagenome mode
+--debuf        to enable debug output
+--out-dir      output path
+``` 
+
+The shell script [run_flye.sh](script/flye.sh) would run the assembly tool on
+all the datasets.
+
+### 2.2.2 hiCanu Assembly 
+Command for running canu assembly:
+
+'''
+./canu \
+    -p ecoli_hifi \
+    -d path/to/output/ecoli_hifi/ \
+    genomeSize=4.8m \ 
+    -pacbio-hifi /path/to/data/ecoli.fastq 
+'''
+'''
+Usage: canu 
+
+-p prefix    for output
+-d output    directory
+genomeSize   approximate genome size to determine input reads coverage
+-pacbio-hifi for PacBio HiFi reads 
+'''
+
+### 2.3 Assessment
+
 
 
