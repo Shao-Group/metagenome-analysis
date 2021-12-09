@@ -18,33 +18,15 @@ This project benchmarks different de novo metagenome assemblers to assess the pe
 
 The following assemblers are benchmarked:
 
-* **hifiasm-meta**
-[hifiasm](https://github.com/xfengnefx/hifiasm-meta)
+* [**hifiasm-meta**](https://github.com/xfengnefx/hifiasm-meta)
 
-* **hiCanu**
-[canu](https://github.com/marbl/canu)
+* [**hiCanu**](https://github.com/marbl/canu)
 
-* **metaFlye**
-[Flye](https://github.com/fenderglass/Flye)
+* [**metaFlye**](https://github.com/fenderglass/Flye)
 
-* **Raven**
-[Raven](https://github.com/lbcb-sci/raven)
-
-## Benchmarking datasets
-The tools were evaluated using the following public datasets:
+* [**Raven**](https://github.com/lbcb-sci/raven)
 
 
-|                  | accession   | #bases (Gb) | N50 read<br>length (kb)| Median read QV | Sample description                               |
-|------------------|-------------|-------------|-----------------------|----------------|--------------------------------------------------|
-| ATCC        | SRR11606871 | 59.2        | 12.0                  | 36             | Mock, ATCC MSA-1003                     |
-| zymoBIOMICS | SRR13128014 | 18.0        | 10.6                  | 40             | Mock, ZymoBIOMICS D6331                 |
-| sheepA           | SRR10963010 | 51.9        | 14.3                  | 25             | Sheep gut microbiome                             |
-| sheepB           | SRR14289618 | 206.4       | 11.8                  | N/A*            | Sheep gut microbiome                             |
-| humanO1          | SRR15275213 | 18.5        | 11.4                  | 40             | Human gut, pool of 4 omnivore samples |
-| humanO2          | SRR15275212 | 15.5        | 10.3                  | 41             | Human gut, pool of 4 omnivore samples |
-| humanV1          | SRR15275211 | 18.8        | 11.0                  | 39             | Human gut, pool of 4 vegan samples    |
-| humanV2          | SRR15275210 | 15.2        | 9.6                   | 40             | Human gut, pool of 4 vegan samples    |
-| chicken          | SRR15214153 | 33.6        | 17.6                  | 30             | Chicken gut microbiome                           |
   
 
 ## 2. Long-read Metagenome Assembly
@@ -55,7 +37,24 @@ The tools were evaluated using the following public datasets:
 ### 2.2 Assembly
 Here, we will be running all 4 assemblers (metaFlye, hiCanu, hifiasm-meta and Raven).
 
-### 2.2.1 metaFlye Assembly
+### 2.2.1 hifiasm-meta Assembly
+
+Command for running hifiasm assembly:
+
+```
+./hifiasm_meta \
+  -t10 \
+  -o ecoli_hifi \
+  /path/to/data/ecoli.fastq 2>ecoli_hifi.log
+```
+```
+Usage : hifiasm
+
+-t  set number of CPUs in use
+-o  prefix of output files
+```
+
+### 2.2.2 metaFlye Assembly
 Command for running flye assembly:
 
 ```
@@ -78,26 +77,52 @@ Usage: flye
 The shell script [run_flye.sh](script/flye.sh) would run the assembly tool on
 all the datasets.
 
-### 2.2.2 hiCanu Assembly 
+### 2.2.3 hiCanu Assembly 
 Command for running canu assembly:
-
-'''
+```
 ./canu \
-    -p ecoli_hifi \
-    -d path/to/output/ecoli_hifi/ \
-    genomeSize=4.8m \ 
-    -pacbio-hifi /path/to/data/ecoli.fastq 
-'''
-'''
+  -p ecoli_hifi \
+  -d path/to/output/ecoli_hifi/ \
+  genomeSize=4.8m \ 
+  -pacbio-hifi /path/to/data/ecoli.fastq 
+```
+```
 Usage: canu 
 
--p prefix    for output
--d output    directory
-genomeSize   approximate genome size to determine input reads coverage
--pacbio-hifi for PacBio HiFi reads 
-'''
+-p            prefix for output
+-d            output directory
+genomeSize    approximate genome size to determine input reads coverage
+-pacbio-hifi  for PacBio HiFi reads 
+```
+
+### 2.2.4 Raven Assembly
+Command for running raven assembly:
+
+```
+./raven \
+  --threads=10 \
+  /path/to/data/ecoli.fastq \
+  --graphical-fragment-assembly ecoli.gfa > ecoli.fasta
+```
+```
+Usage: raven
+--graphical-fragment-assembly  prints the assembly graph in GFA format  
+--threads                      number of threads  
+```
 
 ### 2.3 Assessment
 
 
 
+### 2.3.1 Benchmarking datasets
+The tools were evaluated using the following public datasets:
+
+
+|                  | accession   | #bases (Gb) | N50 read<br>length (kb)| Median read QV | Sample description                               |
+|------------------|-------------|-------------|-----------------------|----------------|--------------------------------------------------|
+| E.coli        | SRR10971019 | 1.4       | ...                 | ...             | E.coli K12                    |
+| ATCC        | SRR11606871 | 59.2        | 12.0                  | 36             | Mock, ATCC MSA-1003                     |
+| zymoBIOMICS | SRR13128014 | 18.0        | 10.6                  | 40             | Mock, ZymoBIOMICS D6331                 |
+| sheepA           | SRR10963010 | 51.9        | 14.3                  | 25             | Sheep gut microbiome                                  |
+| humanV1          | SRR15275211 | 18.8        | 11.0                  | 39             | Human gut, pool of 4 vegan samples    |
+| chicken          | SRR15214153 | 33.6        | 17.6                  | 30             | Chicken gut microbiome                           |
