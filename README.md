@@ -113,7 +113,6 @@ Usage: raven
 ### 2.3 Assessment
 
 
-
 ### 2.3.1 Benchmarking datasets
 The tools were evaluated using the following public datasets:
 
@@ -126,3 +125,58 @@ The tools were evaluated using the following public datasets:
 | sheepA           | SRR10963010 | 51.9        | 14.3                  | 25             | Sheep gut microbiome                                  |
 | humanV1          | SRR15275211 | 18.8        | 11.0                  | 39             | Human gut, pool of 4 vegan samples    |
 | chicken          | SRR15214153 | 33.6        | 17.6                  | 30             | Chicken gut microbiome                           |
+
+
+
+### 2.3.2 Binning 
+
+We used [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/) for binning the assembly result to be further able to check for genome completedness.
+
+Command for running MetaBat2:
+
+```
+./metabat2 \
+  -i /path/to/data/ecoli_assembly.fasta \
+  -o ecoli_hifi/bin \
+  -d -v
+```
+```
+Usage: metabat2
+-i  Contigs in (gzipped) fasta file format 
+-o  Base file name and path for each bin. The default output is fasta format.                   
+-d  Debug output
+-v  Verbose output
+```
+
+### 2.3.3 Genome Completedness
+In here, we will be evaluate the assemblies using [CheckM](https://github.com/Ecogenomics/CheckM).
+
+Command for running CheckM:
+
+```
+./checkm lineage_wf \
+  -t 30 \
+  -x fasta path/to/bins \
+  path/to/output
+  
+./checkm analyze \
+  -t 30 \
+  -x fasta \
+  checkm_data_2015_01_16/hmms/phylo.hmm \
+  path/to/bins \
+  path/to/output
+
+./checkm qa \
+  -t 30  \
+  --out_format 1 \
+  -f path/to/output/result.txt \
+  checkm_data_2015_01_16/hmms/phylo.hmm \
+  path/to/output
+```
+```
+Usage: checkm
+-t               number of threads
+-x               input data extension
+--output format  option 1
+-f               file         
+```
