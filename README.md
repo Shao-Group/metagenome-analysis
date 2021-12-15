@@ -155,22 +155,22 @@ Command for running CheckM:
 
 ```
 ./checkm lineage_wf \
-  -t 30 \
-  -x fasta path/to/bins \
+  -t 40 \
+  -x fa path/to/bins(MetaBat2) \
   path/to/output
   
 ./checkm analyze \
-  -t 30 \
-  -x fasta \
-  checkm_data_2015_01_16/hmms/phylo.hmm \
-  path/to/bins \
+  -t 40 \
+  checkm_data/hmms/phylo.hmm \
+  -x fa \
+  path/to/bins(MetaBat2) \
   path/to/output
 
 ./checkm qa \
-  -t 30  \
+  -t 40  \
   --out_format 1 \
-  -f path/to/output/result.txt \
-  checkm_data_2015_01_16/hmms/phylo.hmm \
+  -f path/to/output/qa_result.txt \
+  checkm_data/hmms/phylo.hmm \
   path/to/output
 ```
 ```
