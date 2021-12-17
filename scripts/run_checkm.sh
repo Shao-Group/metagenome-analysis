@@ -5,41 +5,46 @@
 checkm=/datadisk1/mqm6516/CheckM/conda/bin/checkm
 
 #options: ecoli, atcc, zymo, sheep, human, chicken
-data=zymo
+declare -a input_data=("ecoli" "atcc" "zymo" "sheep" "human" "chicken")
 
 #options: flye, canu, hifiasm, raven
-assembler=flye
+assembler=raven
 
 threads=40
 
-input_bin=/datadisk1/mqm6516/berkeleylab-metabat-8b5702be9852/build/bin/${data}_${assembler}/
-
 marker_file=/datadisk1/mqm6516/CheckM/conda/checkm_data/hmms/phylo.hmm
 
-result=/datadisk1/mqm6516/CheckM/conda/output/${data}_${assembler}/
+for data in "${input_data[@]}"; do
+  input_bin=/datadisk1/mqm6516/berkeleylab-metabat-8b5702be9852/build/bin/${data}_${assembler}/
+  
+  result=/datadisk1/mqm6516/CheckM/conda/output/${data}_${assembler}/
+  
+  echo -e "--------------------------------------------------- \n ";
+  echo "running CheckM on ${data} ...";
+  
+  rm -rf checkm.jobs.list
+  
+  time( \
+    ${checkm} lineage_wf \
+    -t ${threads} \
+    -x fa ${input_bin} \
+    ${result};
 
-echo "running CheckM..."
+    ${checkm} analyze \
+    -t ${threads} \
+    ${marker_file} \
+    -x fa ${input_bin} \
+    ${result};
 
-rm -rf checkm.jobs.list
- 
-/usr/bin/time -v \
-  ${checkm} lineage_wf \
-  -t ${threads} \
-  -x fa ${input_bin} \
-  ${result}
+    ${checkm} qa \
+    -t ${threads} \
+    --out_format 1 \
+    -f ${result}qa_result.txt \
+    ${marker_file} \
+    ${result} \
+    ) 
+    
+  chmod +x run_checkm.sh
+  echo run_checkm.sh >> checkm.jobs.list
 
-  ${checkm} analyze \
-  -t ${threads} \
-  ${marker_file} \
-  -x fa ${input_bin} \
-  ${result}
-
-  ${checkm} qa \
-  -t ${threads} \
-  --out_format 1 \
-  -f ${result}qa_result.txt \
-  ${marker_file} \
-  ${result} 
-
-chmod +x run_checkm.sh
-echo run_checkm.sh >> checkm.jobs.list
+done  
