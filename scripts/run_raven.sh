@@ -17,18 +17,26 @@ data_human=/datadisk1/mqm6516/Data/metagenome/LR/human/SRR15275211_subreads.fast
 data_chicken=/datadisk1/mqm6516/Data/metagenome/LR/chicken/SRR152145153_subreads.fastq.gz
 
 threads=30
-   
-result=/datadisk1/mqm6516/raven
-   
-echo "running Raven..."
+
+#options: ecoli, atcc, zymo, sheep, human, chicken
+declare -a input_data=("ecoli" "atcc" "zymo" "sheep" "human" "chicken")
+
+for data in "${input_data[@]}"; do
   
-rm -rf raven.jobs.list
+  echo "running Raven on ${data} hifi data ..."
   
-/usr/bin/time -v \
-  ${raven} \
-  --graphical-fragment-assembly \
-  --thread=${threads} ${data_sheep} >atcc_hifi_assembly.fastq 
+  dataset=data_${data}
   
- 
-chmod +x run_raven.sh
-echo run_raven.sh >> raven.jobs.list
+  rm -rf raven.jobs.list
+  
+  /usr/bin/time -v \
+    ${raven} \
+    --threads=${threads} \
+    ${!dataset} \
+    --graphical-fragment-assembly \
+    ${data}_hifi.gfa > ${data}_hifi_assembly.fasta
+  
+  chmod +x run_raven.sh
+  echo run_raven.sh >> raven.jobs.list
+
+done  

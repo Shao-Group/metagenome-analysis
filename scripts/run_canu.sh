@@ -2,28 +2,47 @@
 #Author: Mayank Murali
 #Script to run Canu metagenome assembler
 
-#canu=/datadisk1/mqm6516/canu/build/bin/canu
+canu=/datadisk1/mqm6516/canu/build/bin/canu
 
-#data_sheep=/datadisk1/mqm6516/Data/metagenome/LR/sheep/SRR10963010_subreads.fastq.gz
+data_ecoli=/datadisk1/mqm6516/Data/metagenome/LR/ecoli/ecoli.fastq
 
-#threads=20
- 
-#result=/datadisk1/mqm6516/canu/build/bin/sheep_hifi
+data_atcc=/datadisk1/mqm6516/Data/metagenome/LR/ATCC/SRR11606871_subreads.fastq.gz
 
-echo "running HiCanu..."
+data_zymo=/datadisk1/mqm6516/Data/metagenome/LR/ZymoBIOMICS/SRR13128014_subreads.fastq.gz
 
-rm -rf canu.jobs.list
- 
-#/usr/bin/time -v \
-#  ${canu} \
-#  -p sheep \
-#  -d ${result} \
-#  genomeSize=1000m \
-#  maxInputCoverage=1000 \
-#  batMemory=200 \
-#  -pacbio-hifi ${data_sheep}
+data_sheep=/datadisk1/mqm6516/Data/metagenome/LR/sheep/SRR10963010_subreads.fastq
 
-/datadisk1/mqm6516/canu/build/bin/canu -p sheep -d /datadisk1/mqm6516/canu/build/bin/sheep_hifi genomeSize=1000m maxInputCoverage=1000 batMemory=200 -pacbio-hifi /datadisk1/mqm6516/Data/metagenome/LR/sheep/SRR10963010_subreads.fastq
+data_human=/datadisk1/mqm6516/Data/metagenome/LR/human/SRR15275211_subreads.fastq.gz
 
-chmod +x run_canu.sh
-echo run_canu.sh >> canu.jobs.list
+data_chicken=/datadisk1/mqm6516/Data/metagenome/LR/chicken/SRR152145153_subreads.fastq.gz
+
+threads=40
+
+#options: ecoli, atcc, zymo, sheep, human, chicken
+declare -a input_data=("ecoli" "atcc" "zymo" "sheep" "human" "chicken")
+
+for data in "${input_data[@]}"; do
+  
+  result=/datadisk1/mqm6516/canu/build/bin/${data}_hifi
+  
+  echo "running HiCanu on ${data} sample ..."
+
+  dataset=data_${data}
+  
+  rm -rf canu.jobs.list
+  
+  /usr/bin/time -v \
+    ${canu} \
+    -p ${data} \
+    -d ${result} \
+    genomeSize=1000m \
+    maxInputCoverage=1000 \
+    batMemory=200 \
+    -pacbio-hifi ${!dataset}
+
+#/datadisk1/mqm6516/canu/build/bin/canu -p atcc -d /datadisk1/mqm6516/canu/build/bin/atcc_hifi genomeSize=100m maxInputCoverage=1000 batMemory=200 -pacbio-hifi /datadisk1/mqm6516/Data/metagenome/LR/ATCC/SRR11606871_subreads.fastq.gz
+
+  chmod +x run_canu.sh
+  echo run_canu.sh >> canu.jobs.list
+
+done  

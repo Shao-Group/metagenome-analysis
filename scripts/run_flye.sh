@@ -14,25 +14,33 @@ data_sheep=/datadisk1/mqm6516/Data/metagenome/LR/sheep/SRR10963010_subreads.fast
 
 data_human=/datadisk1/mqm6516/Data/metagenome/LR/human/SRR15275211_subreads.fastq.gz
 
-data_chicken=/datadisk1/mqm6516/Data/metagenome/LR/chicken/SRR152145153_subreads.fastq.gz
+data_chicken=/datadisk1/mqm6516/Data/metagenome/LR/chicken/SRR15214153_subreads.fastq.gz
 
-threads=10
+threads=20
 
-result=/datadisk1/mqm6516/Flye/human_hifi
+#options: ecoli, atcc, zymo, sheep, human, chicken
+declare -a input_data=("ecoli" "atcc" "zymo" "sheep" "human" "chicken")
+ 
+for data in "${input_data[@]}"; do
+  
+  result=/datadisk1/mqm6516/Flye/${data}_hifi
+  
+  echo "running metaFlye on ${data} hifi data ..."
+  
+  dataset=data_${data}
 
-echo "running metaFlye..."
+  rm -rf flye.jobs.list
+  
+  /usr/bin/time -v \
+    ${flye} \
+    --pacbio-hifi ${!dataset} \
+    --threads ${threads} \
+    --plasmids \
+    --meta \
+    --out-dir ${result} \
+    >flye.out
 
-rm -rf flye.jobs.list
+  chmod +x run_flye.sh
+  echo run_flye.sh >> flye.jobs.list
 
-/usr/bin/time -v \
-  ${flye} \
-  --pacbio-hifi ${data_human} \
-  --threads ${threads} \
-  --plasmids \
-  --meta \
-  --out-dir ${result} \
-  >flye.out
-
-
-chmod +x run_flye.sh
-echo run_flye.sh >> flye.jobs.list
+done  
