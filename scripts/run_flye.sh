@@ -25,7 +25,7 @@ for data in "${input_data[@]}"; do
   
   result=/datadisk1/mqm6516/Flye/${data}_hifi
   
-  echo "running metaFlye on ${data} hifi data ..."
+  echo "... Running metaFlye on ${data} HiFi data ..."
   
   dataset=data_${data}
 
@@ -42,5 +42,7 @@ for data in "${input_data[@]}"; do
 
   chmod +x run_flye.sh
   echo run_flye.sh >> flye.jobs.list
+
+  echo -e "--------------------------------------------------- \n ";
 
 done  

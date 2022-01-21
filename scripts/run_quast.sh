@@ -7,9 +7,10 @@ quast=/datadisk1/mqm6516/QUAST/conda/bin/quast.py
 #options: ecoli, atcc, zymo, sheep, human, chicken
 declare -a input_data=("ecoli" "atcc" "zymo" "sheep" "human" "chicken")
 
-#options: flye, canu, hifiasm, raven
-#assembler=hifiasm
-
+#input_assembly_1: flye;
+#input_assembly_2: canu;
+#input_assembly_3: hifiasm;
+#input_assembly_4: raven;
 
 for data in "${input_data[@]}"; do
   
@@ -20,9 +21,8 @@ for data in "${input_data[@]}"; do
 
   result=/datadisk1/mqm6516/QUAST/${data}/
   
-  echo -e "--------------------------------------------------- \n ";
-  echo "running QUAST on ${data} ...";
-  
+  echo "... Running QUAST on ${data} for all assemblers ...";
+
   rm -rf quast.jobs.list
   
   time( \
@@ -36,5 +36,7 @@ for data in "${input_data[@]}"; do
     
   chmod +x run_quast.sh
   echo run_quast.sh >> quast.jobs.list
+  
+  echo -e "--------------------------------------------------- \n ";
 
 done 

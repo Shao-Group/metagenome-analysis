@@ -25,7 +25,7 @@ for data in "${input_data[@]}"; do
   
   result=/datadisk1/mqm6516/canu/build/bin/${data}_hifi
   
-  echo "running HiCanu on ${data} sample ..."
+  echo "... Running HiCanu on ${data} HiFi data ..."
 
   dataset=data_${data}
   
@@ -44,5 +44,7 @@ for data in "${input_data[@]}"; do
 
   chmod +x run_canu.sh
   echo run_canu.sh >> canu.jobs.list
+
+  echo -e "--------------------------------------------------- \n ";
 
 done  

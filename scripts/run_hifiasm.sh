@@ -23,7 +23,7 @@ declare -a input_data=("ecoli" "atcc" "zymo" "sheep" "human" "chicken")
 
 for data in "${input_data[@]}"; do
   
-  echo "running hifiasm on ${data} hifi data ..."
+  echo "... Running hifiasm on ${data} HiFi data ..."
   
   dataset=data_${data}
 
@@ -38,5 +38,7 @@ for data in "${input_data[@]}"; do
 #./hifiasm_meta -t32 -o sheep_hifi /datadisk1/mqm6516/Data/metagenome/LR/sheep/SRR10963010_subreads.fastq 2>sheep_hifi.log
   chmod +x run_hifiasm.sh
   echo run_hifiasm.sh >> hifiasm.job
+
+  echo -e "--------------------------------------------------- \n ";
 
 done

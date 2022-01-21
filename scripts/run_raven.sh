@@ -23,7 +23,7 @@ declare -a input_data=("ecoli" "atcc" "zymo" "sheep" "human" "chicken")
 
 for data in "${input_data[@]}"; do
   
-  echo "running Raven on ${data} hifi data ..."
+  echo "... Running Raven on ${data} HiFi data ..."
   
   dataset=data_${data}
   
@@ -38,5 +38,7 @@ for data in "${input_data[@]}"; do
   
   chmod +x run_raven.sh
   echo run_raven.sh >> raven.jobs.list
+
+  echo -e "--------------------------------------------------- \n ";
 
 done  
