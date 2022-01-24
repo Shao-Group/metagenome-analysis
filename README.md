@@ -27,8 +27,6 @@ The following assemblers are benchmarked:
 * [**Raven**](https://github.com/lbcb-sci/raven)
 
 
-  
-
 ## 2. Long-read Metagenome Assembly
 
 
@@ -74,7 +72,7 @@ Usage: flye
 --out-dir      output path
 ``` 
 
-The shell script [run_flye.sh](script/flye.sh) would run the assembly tool on
+The shell script [run_flye.sh](https://github.com/Shao-Group/metagenome-analysis/blob/master/scripts/run_flye.sh) would run the assembly tool on
 all the datasets.
 
 ### 2.2.3 hiCanu Assembly 
@@ -128,7 +126,11 @@ The tools were evaluated using the following public datasets:
 
 
 
-### 2.3.2 Binning 
+
+### 2.3.2 Assembly evaluation using QUAST/metaQUAST
+To be done......
+
+### 2.3.3 Binning using MetaBat2 
 
 We used [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/) for binning the assembly result to be further able to check for genome completedness.
 
@@ -148,8 +150,15 @@ Usage: metabat2
 -v  Verbose output
 ```
 
-### 2.3.3 Genome Completedness
+### 2.3.4 Genome Completedness using CheckM
 In here, we will be evaluate the assemblies using [CheckM](https://github.com/Ecogenomics/CheckM).
+
+Some convention,
+- Near-complete: > 90\% checkM completeness score & < 5\% contamination score.
+- High-quality:  > 70\% complete & < 10\% contaminated.
+- Medium-quality: > 50\% complete & QS > 50. 
+
+where QS (quality score) is given by `completeness-(5*contamination)`.
 
 Command for running CheckM:
 
@@ -180,3 +189,59 @@ Usage: checkm
 --output format  option 1
 -f               file         
 ```
+
+### 2.3.5 Quality Analysis using BUSCO
+
+The quality of metagenome assembly was analyzed using [BUSCO](https://busco.ezlab.org/).
+
+Command for running BUSCO:
+
+```
+./busco \
+  -f \
+  -c 40 \
+  -m genome \
+  --augustus \
+  -i path/to/input/assembly \
+  -o path/to/output \
+  --auto-lineage-euk
+  
+mkdir path/to/output/summary   
+cp path/to/output/short_summary.* path/to/output/summary
+
+python3 generate_plot.py \
+  -wd path/to/output/summary
+```  
+```
+Usage: busco
+-f                   force rewriting of existing files
+-c                   specify the number of threads/cores to use
+-m                   specify which BUSCO analysis mode to run (genome for genome assemblies)
+--augustus           use augustus gene predictor for eukaryote runs
+-i                   input sequence file in FASTA format
+-o                   output directory
+--auto-lineage-euk   run auto-placement just on eukaryote tree to find optimum lineage path
+-wd                  location of your working directory
+```
+
+
+|             | >1Mb circular contigs | >1Mb circular contigs,<br>near-complete | Near-complete MAGs | High-quality MAGs | Medium-quality MAGs |
+|-------------|-----------------------|--------------------------------------|--------------------|-------------------|---------------------|
+| E.coli      | x                  | x                                | x             | x               | x                  |
+| ATCC      | x                  | x                                 | x                | x              | x                 |
+| Zymo     | x                    | x                                   | x                 | x                | x                |
+| Sheep     | x                  | x                                   | x               | x                | x                  |
+| human     | x                   | x                                  | x                | x                | x                 |
+| Chicken     | x                  | x                                   |x                | x               | x                  |
+
+
+
+|             | Wall clock (h) | PeakRSS (Gb) |
+|-------------|------------|---------|
+| E.coli       | y         | y    |
+| ATCC | y       | y     |
+| Zymo      | y      | y     |
+| Sheep      | y        | y   |
+| Human     | y      | y   |
+| Chicken     | y         | y    |
+
