@@ -245,3 +245,35 @@ Usage: busco
 | Human     | y      | y   |
 | Chicken     | y         | y    |
 
+### 2.3.6 Vizualization using Bandage
+A [Bandage](https://github.com/rrwick/Bandage) plot of chicken's primary contig graph.
+<p align="center">
+ ![Graph](/plots/chicken/chicken_hifiasm_graph.png)
+
+| **Assembler** | **Dataset**| **Node count**| **Edge count**| **Median depth** | 
+|:-------------:|:-----------:|:---------------|:-------------:|:------------------:
+| MetaFlye      | E\.coli     | 1         | 1           |         302.0x          | 
+|               | ATCC        | 137       | 68          |         192.0x          | 
+|               | Zymo        | 840       | 443          |     130.0x              | 
+|               | SheepA      | 27,296    | 14,735        |  10.0x                 | 
+|               | HumanV1     | 24,671    | 17,056        |   9.0x                | 
+|               | Chicken     | 10,963    | 11,359         |   10.0x                | 
+| HiCanu        | E\.coli     |   6,405   |       6,578  |    1.0x               | 
+|               | ATCC        |     82,270| 95,069       |     1.0x              | 
+|               | Zymo        | 31,164          |   34,126       |   1.0x       | 
+|               | SheepA      |  505,391    | 499,733     |    1.0x       | 
+|               | HumanV1     |  370,372    | 360,885    |     1.0x         | 
+|               | Chicken     |   153,854 |   152,774     |      1.0x     | 
+| Hifiasm-meta  | E\.coli     | 129    |   1          |    178.0x               | 
+|               | ATCC        | 72,765   |   126,045         |    11.0x               | 
+|               | Zymo        |   25,203 |   29,792        |    11.0x               | 
+|               | SheepA      |  34,783 |    5,624       |    3.0x               | 
+|               | HumanV1     |   23,114  |     3,720    |   3.0x             | 
+|               | Chicken     |  21,903 | 14,556   |    2.0x      | 
+| Raven         | E\.coli     |      1          |     1          |  0.00134x     | 
+|               | ATCC        |     354     |     26         |  0.000612x       | 
+|               | Zymo        |    940      |   52         |    0.000488x       | 
+|               | SheepA      |     24,366    |  12,237   | 0.000349x         | 
+|               | HumanV1     |     15,703   |      2,676      |   0.000396x        | 
+|               | Chicken     |  8,635     |   1,721    |   0.000229x        |
+
