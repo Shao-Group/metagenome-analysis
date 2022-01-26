@@ -147,6 +147,7 @@ Usage: metaquast
 --gene-finding  enables gene finding.
 --labels        human-readable assembly names for the report.
 -o              output directory. 
+```
 
 ### 2.3.3 Binning using MetaBat2 
 
