@@ -267,7 +267,7 @@ Usage: busco
 ### 2.3.6 Vizualization using Bandage
 A [Bandage](https://github.com/rrwick/Bandage) plot of chicken's primary contig graph.
 <p align="center">
- ![Graph](/plots/chicken/chicken_hifiasm_graph.png)
+ ![Graph](https://github.com/Shao-Group/metagenome-analysis/blob/master/plots/chicken/chicken_hifiasm_graph.png)
 
 | **Assembler** | **Dataset**| **Node count**| **Edge count**| **Median depth** | 
 |:-------------:|:-----------:|:---------------|:-------------:|:------------------:
