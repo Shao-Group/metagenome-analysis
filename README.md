@@ -127,8 +127,26 @@ The tools were evaluated using the following public datasets:
 
 
 
-### 2.3.2 Assembly evaluation using QUAST/metaQUAST
-To be done......
+### 2.3.2 Assembly evaluation using metaQUAST
+For assembly evaluation, we used [metaQUAST](https://github.com/ablab/quast) to compute various metrics.
+
+Command for running metaQUAST.
+```
+python3 metaquast.py \
+    --threads=20 \
+    --mgm \
+    --gene-finding \
+    --labels=metaFlye,hiCani,hifiasm-meta,Raven \
+    /path/to/metaFlye/contigs ....
+    -o /path/to/output
+```
+```
+Usage: metaquast
+--threads       maximum number of threads.
+--mgm           force use of MetaGeneMark for gene finding.
+--gene-finding  enables gene finding.
+--labels        human-readable assembly names for the report.
+-o              output directory. 
 
 ### 2.3.3 Binning using MetaBat2 
 
