@@ -8,7 +8,7 @@
     1.  [Quality Control](#21--quality-control)
     2.  [Assembly](#22--assembly)
     3.  [Assessment](#23--assessment)
-
+3. [References](#3-references)
 
 ## 1. Overview
 
@@ -16,16 +16,12 @@ The following assemblers are benchmarked:
 
 This project benchmarks different de novo metagenome assemblers to assess the performance and limitations with respect to long-read metagenome data (both synthetic and real).
 
-The following assemblers are benchmarked:
-
-* [**hifiasm-meta**](https://github.com/xfengnefx/hifiasm-meta)
-
-* [**hiCanu**](https://github.com/marbl/canu)
+The following assemblers are analyzed:
 
 * [**metaFlye**](https://github.com/fenderglass/Flye)
-
+* [**hiCanu**](https://github.com/marbl/canu)
+* [**hifiasm-meta**](https://github.com/xfengnefx/hifiasm-meta)
 * [**Raven**](https://github.com/lbcb-sci/raven)
-
 
 ## 2. Long-read Metagenome Assembly
 
@@ -33,26 +29,9 @@ The following assemblers are benchmarked:
 ### 2.1 Quality Control
 
 ### 2.2 Assembly
-Here, we will be running all 4 assemblers (metaFlye, hiCanu, hifiasm-meta and Raven).
+Here, we will be running all 4 assemblers (metaFlye[^fn1], hiCanu[^fn2], hifiasm-meta[^fn3] and Raven[^fn4]).
 
-### 2.2.1 hifiasm-meta Assembly
-
-Command for running hifiasm assembly:
-
-```
-./hifiasm_meta \
-  -t10 \
-  -o ecoli_hifi \
-  /path/to/data/ecoli.fastq 2>ecoli_hifi.log
-```
-```
-Usage : hifiasm
-
--t  set number of CPUs in use
--o  prefix of output files
-```
-
-### 2.2.2 metaFlye Assembly
+### 2.2.1 metaFlye Assembly
 Command for running flye assembly:
 
 ```
@@ -75,7 +54,7 @@ Usage: flye
 The shell script [run_flye.sh](https://github.com/Shao-Group/metagenome-analysis/blob/master/scripts/run_flye.sh) would run the assembly tool on
 all the datasets.
 
-### 2.2.3 hiCanu Assembly 
+### 2.2.2 hiCanu Assembly 
 Command for running canu assembly:
 ```
 ./canu \
@@ -91,6 +70,23 @@ Usage: canu
 -d            output directory
 genomeSize    approximate genome size to determine input reads coverage
 -pacbio-hifi  for PacBio HiFi reads 
+```
+
+### 2.2.3 hifiasm-meta Assembly
+
+Command for running hifiasm assembly: 
+
+```
+./hifiasm_meta \
+  -t10 \
+  -o ecoli_hifi \
+  /path/to/data/ecoli.fastq 2>ecoli_hifi.log
+```
+```
+Usage : hifiasm
+
+-t  set number of CPUs in use
+-o  prefix of output files
 ```
 
 ### 2.2.4 Raven Assembly
@@ -128,7 +124,7 @@ The tools were evaluated using the following public datasets:
 
 
 ### 2.3.2 Assembly evaluation using metaQUAST
-For assembly evaluation, we used [metaQUAST](https://github.com/ablab/quast) to compute various metrics.
+For assembly evaluation, we used [metaQUAST](https://github.com/ablab/quast)[^fn5] to compute various metrics.
 
 Command for running metaQUAST.
 ```
@@ -151,7 +147,7 @@ Usage: metaquast
 
 ### 2.3.3 Binning using MetaBat2 
 
-We used [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/) for binning the assembly result to be further able to check for genome completedness.
+We used [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/)[^fn6] for binning the assembly result to be further able to check for genome completedness.
 
 Command for running MetaBat2:
 
@@ -170,7 +166,7 @@ Usage: metabat2
 ```
 
 ### 2.3.4 Genome Completedness using CheckM
-In here, we will be evaluate the assemblies using [CheckM](https://github.com/Ecogenomics/CheckM).
+In here, we will be evaluate the assemblies using [CheckM](https://github.com/Ecogenomics/CheckM)[^fn7].
 
 Some convention,
 - Near-complete: > 90\% checkM completeness score & < 5\% contamination score.
@@ -211,7 +207,7 @@ Usage: checkm
 
 ### 2.3.5 Quality Analysis using BUSCO
 
-The quality of metagenome assembly was analyzed using [BUSCO](https://busco.ezlab.org/).
+The quality of metagenome assembly was analyzed using [BUSCO](https://busco.ezlab.org/)[^fn8].
 
 Command for running BUSCO:
 
@@ -296,3 +292,22 @@ A [Bandage](https://github.com/rrwick/Bandage) plot of chicken's primary contig 
 |               | HumanV1     |     15,703   |      2,676      |   0.000396x        | 
 |               | Chicken     |  8,635     |   1,721    |   0.000229x        |
 
+    
+## 3. References
+[^fn1]: Mikhail Kolmogorov, Derek M. Bickhart, Bahar Behsaz, Alexey Gurevich, Mikhail Rayko, Sung Bong Shin, Kristen Kuhn, Jeffrey Yuan, Evgeny Polevikov, Timothy P. L. Smith and Pavel A. Pevzner "metaFlye: scalable long-read metagenome assembly using repeat graphs", Nature Methods, 2020 doi:s41592-020-00971-x
+
+[^fn2]: Nurk S, Walenz BP, Rhiea A, Vollger MR, Logsdon GA, Grothe R, Miga KH, Eichler EE, Phillippy AM, Koren S. HiCanu: accurate assembly of segmental duplications, satellites, and allelic variants from high-fidelity long reads. biorXiv. (2020)
+
+[^fn3]: Feng, Xiaowen, et al. "Metagenome assembly of high-fidelity long reads with hifiasm-meta." arXiv preprint arXiv:2110.08457 (2021)
+
+[^fn4]: Vaser, R., Šikić, M. Time- and memory-efficient genome assembly with Raven. Nat Comput Sci 1, 332–336 (2021). https://doi.org/10.1038/s43588-021-00073-4
+
+[^fn5]: Alla Mikheenko, Vladislav Saveliev, Alexey Gurevich, MetaQUAST: evaluation of metagenome assemblies, Bioinformatics, Volume 32, Issue 7, 1 April 2016, Pages 1088–1090, https://doi.org/10.1093/bioinformatics/btv697
+
+[^fn6]: Kang DD, Li F, Kirton E, Thomas A, Egan R, An H, Wang Z. 2019. MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies. PeerJ 7:e7359 https://doi.org/10.7717/peerj.7359
+
+[^fn7]: Parks DH, Imelfort M, Skennerton CT, Hugenholtz P, Tyson GW. 2015. CheckM: assessing the quality of microbial genomes recovered from isolates, single cells, and metagenomes. Genome Research, 25: 1043–1055.
+
+[^fn8]: Mosè Manni, Matthew R Berkeley, Mathieu Seppey, Felipe A Simão, Evgeny M Zdobnov, BUSCO Update: Novel and Streamlined Workflows along with Broader and Deeper Phylogenetic Coverage for Scoring of Eukaryotic, Prokaryotic, and Viral Genomes, Molecular Biology and Evolution, Volume 38, Issue 10, October 2021, Pages 4647–4654.
+
+[^fn9]: Wick R.R., Schultz M.B., Zobel J. & Holt K.E. (2015). Bandage: interactive visualisation of de novo genome assemblies. Bioinformatics, 31(20), 3350-3352.
