@@ -1,20 +1,22 @@
-# Benchmarking and analysis different de novo Metagenome Assemblers for long-read data
+
+# Performance Analysis Of de novo Metagenome Assemblers for Long-Reads HiFi Data
 
 
 **Contents**
 
 1. [Overview](#1-overview)
-2. [Long-read Metagenome Assembly](#2-long-read-metagenome-assembly)
+2. [Metagenome Analysis Pipeline](#2-long-read-metagenome-assembly)
     1.  [Quality Control](#21--quality-control)
     2.  [Assembly](#22--assembly)
     3.  [Assessment](#23--assessment)
+    4.  [Visualization](#24--vizualization)
 3. [References](#3-references)
 
 ## 1. Overview
 
 The following assemblers are benchmarked:
 
-This project benchmarks different de novo metagenome assemblers to assess the performance and limitations with respect to long-read metagenome data (both synthetic and real).
+This project analyzes different de novo metagenome assemblers to assess their performance and limitations with respect to [PacBio long-reads HiFi](https://www.pacb.com/smrt-science/smrt-sequencing/hifi-reads-for-highly-accurate-long-read-sequencing/) metagenome data (both synthetic and real).
 
 The following assemblers are analyzed:
 
@@ -23,13 +25,30 @@ The following assemblers are analyzed:
 * [**hifiasm-meta**](https://github.com/xfengnefx/hifiasm-meta)
 * [**Raven**](https://github.com/lbcb-sci/raven)
 
-## 2. Long-read Metagenome Assembly
+## 2. Metagenome Analysis Pipeline
 
 
-### 2.1 Quality Control
+## 2.1 Quality Control 
 
-### 2.2 Assembly
+The assemblers were evaluated using the following public datasets:
+
+
+|                  | accession   | #bases (Gb) | N50 read<br>length (kb)| Median read QV | Sample description                               |
+|------------------|-------------|-------------|-----------------------|----------------|--------------------------------------------------|
+| E.coli        | SRR10971019 | 1.4       | ...                 | ...             | E.coli K12                    |
+| ATCC        | SRR11606871 | 59.2        | 12.0                  | 36             | Mock, ATCC MSA-1003                     |
+| zymoBIOMICS | SRR13128014 | 18.0        | 10.6                  | 40             | Mock, ZymoBIOMICS D6331                 |
+| sheepA           | SRR10963010 | 51.9        | 14.3                  | 25             | Sheep gut microbiome                                  |
+| humanV1          | SRR15275211 | 18.8        | 11.0                  | 39             | Human gut, pool of 4 vegan samples    |
+| chicken          | SRR15214153 | 33.6        | 17.6                  | 30             | Chicken gut microbiome                           |
+
+
+The sequencing data were uploaded to the Galaxy web platform[^fn11], and the public server at usegalaxy.org was used to perform FastQC[^fn10] analysis on the data.
+The results of the analysis have been publicly published [here](https://usegalaxy.org/u/mayankmurali/h/metagenome-datacheck).
+
+## 2.2 Assembly
 Here, we will be running all 4 assemblers (metaFlye[^fn1], hiCanu[^fn2], hifiasm-meta[^fn3] and Raven[^fn4]).
+
 
 ### 2.2.1 metaFlye Assembly
 Command for running flye assembly:
@@ -104,26 +123,11 @@ Usage: raven
 --threads                      number of threads  
 ```
 
-### 2.3 Assessment
+## 2.3 Assessment
 
 
-### 2.3.1 Benchmarking datasets
-The tools were evaluated using the following public datasets:
+### 2.3.1 Assembly evaluation using metaQUAST
 
-
-|                  | accession   | #bases (Gb) | N50 read<br>length (kb)| Median read QV | Sample description                               |
-|------------------|-------------|-------------|-----------------------|----------------|--------------------------------------------------|
-| E.coli        | SRR10971019 | 1.4       | ...                 | ...             | E.coli K12                    |
-| ATCC        | SRR11606871 | 59.2        | 12.0                  | 36             | Mock, ATCC MSA-1003                     |
-| zymoBIOMICS | SRR13128014 | 18.0        | 10.6                  | 40             | Mock, ZymoBIOMICS D6331                 |
-| sheepA           | SRR10963010 | 51.9        | 14.3                  | 25             | Sheep gut microbiome                                  |
-| humanV1          | SRR15275211 | 18.8        | 11.0                  | 39             | Human gut, pool of 4 vegan samples    |
-| chicken          | SRR15214153 | 33.6        | 17.6                  | 30             | Chicken gut microbiome                           |
-
-
-
-
-### 2.3.2 Assembly evaluation using metaQUAST
 For assembly evaluation, we used [metaQUAST](https://github.com/ablab/quast)[^fn5] to compute various metrics.
 
 Command for running metaQUAST.
@@ -145,7 +149,7 @@ Usage: metaquast
 -o              output directory. 
 ```
 
-### 2.3.3 Binning using MetaBat2 
+### 2.3.2 Binning using MetaBat2
 
 We used [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/)[^fn6] for binning the assembly result to be further able to check for genome completedness.
 
@@ -165,8 +169,8 @@ Usage: metabat2
 -v  Verbose output
 ```
 
-### 2.3.4 Genome Completedness using CheckM
-In here, we will be evaluate the assemblies using [CheckM](https://github.com/Ecogenomics/CheckM)[^fn7].
+### 2.3.3 Genome Completeness using CheckM
+In here, we will be evaluate the assemblies using [CheckM](https://github.com/Ecogenomics/CheckM)[^fn7]. 
 
 Some convention,
 - Near-complete: > 90\% checkM completeness score & < 5\% contamination score.
@@ -205,7 +209,7 @@ Usage: checkm
 -f               file         
 ```
 
-### 2.3.5 Quality Analysis using BUSCO
+### 2.3.4 Quality Analysis using BUSCO
 
 The quality of metagenome assembly was analyzed using [BUSCO](https://busco.ezlab.org/)[^fn8].
 
@@ -239,7 +243,6 @@ Usage: busco
 -wd                  location of your working directory
 ```
 
-
 |             | >1Mb circular contigs | >1Mb circular contigs,<br>near-complete | Near-complete MAGs | High-quality MAGs | Medium-quality MAGs |
 |-------------|-----------------------|--------------------------------------|--------------------|-------------------|---------------------|
 | E.coli      | x                  | x                                | x             | x               | x                  |
@@ -260,10 +263,13 @@ Usage: busco
 | Human     | y      | y   |
 | Chicken     | y         | y    |
 
-### 2.3.6 Vizualization using Bandage
-A [Bandage](https://github.com/rrwick/Bandage) plot of chicken's primary contig graph.
+
+## 2.4 Vizualization 
+
+A [Bandage](https://github.com/rrwick/Bandage)[^fn9] plot of chicken's primary contig graph.
 <p align="center">
- ![Graph](https://github.com/Shao-Group/metagenome-analysis/blob/master/plots/chicken/chicken_hifiasm_graph.png)
+ ![Graph](https://github.com/Shao-Group/metagenome-analysis/blob/master/plots/chicken/chicken_hifiasm_graph.png?raw=true)
+</p>
 
 | **Assembler** | **Dataset**| **Node count**| **Edge count**| **Median depth** | 
 |:-------------:|:-----------:|:---------------|:-------------:|:------------------:
@@ -293,6 +299,7 @@ A [Bandage](https://github.com/rrwick/Bandage) plot of chicken's primary contig 
 |               | Chicken     |  8,635     |   1,721    |   0.000229x        |
 
     
+    
 ## 3. References
 [^fn1]: Mikhail Kolmogorov, Derek M. Bickhart, Bahar Behsaz, Alexey Gurevich, Mikhail Rayko, Sung Bong Shin, Kristen Kuhn, Jeffrey Yuan, Evgeny Polevikov, Timothy P. L. Smith and Pavel A. Pevzner "metaFlye: scalable long-read metagenome assembly using repeat graphs", Nature Methods, 2020 doi:s41592-020-00971-x
 
@@ -311,3 +318,7 @@ A [Bandage](https://github.com/rrwick/Bandage) plot of chicken's primary contig 
 [^fn8]: Mosè Manni, Matthew R Berkeley, Mathieu Seppey, Felipe A Simão, Evgeny M Zdobnov, BUSCO Update: Novel and Streamlined Workflows along with Broader and Deeper Phylogenetic Coverage for Scoring of Eukaryotic, Prokaryotic, and Viral Genomes, Molecular Biology and Evolution, Volume 38, Issue 10, October 2021, Pages 4647–4654.
 
 [^fn9]: Wick R.R., Schultz M.B., Zobel J. & Holt K.E. (2015). Bandage: interactive visualisation of de novo genome assemblies. Bioinformatics, 31(20), 3350-3352.
+
+[^fn10]: Andrews, S. (n.d.). FastQC A Quality Control tool for High Throughput Sequence Data. http://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+
+[^fn11]: Enis Afgan, Dannon Baker, Bérénice Batut, Marius van den Beek, Dave Bouvier, Martin Čech, John Chilton, Dave Clements, Nate Coraor, Björn Grüning, Aysam Guerler, Jennifer Hillman-Jackson, Vahid Jalili, Helena Rasche, Nicola Soranzo, Jeremy Goecks, James Taylor, Anton Nekrutenko, and Daniel Blankenberg. The Galaxy platform for accessible, reproducible and collaborative biomedical analyses: 2018 update, Nucleic Acids Research, Volume 46, Issue W1, 2 July 2018, Pages W537–W544, doi:10.1093/nar/gky379
