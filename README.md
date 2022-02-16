@@ -1,5 +1,5 @@
 
-# Performance Analysis Of de novo Metagenome Assemblers for Long-Reads HiFi Data
+# Performance Analysis of de novo Metagenome Assemblers for Long-Reads HiFi Data
 
 
 **Contents**
@@ -16,7 +16,7 @@
 
 The following assemblers are benchmarked:
 
-This project analyzes different de novo metagenome assemblers to assess their performance and limitations with respect to [PacBio long-reads HiFi](https://www.pacb.com/smrt-science/smrt-sequencing/hifi-reads-for-highly-accurate-long-read-sequencing/) metagenome data (both synthetic and real).
+This project analyzes different de novo metagenome assemblers to assess their performance and limitations with respect to [PacBio HiFi long-reads](https://www.pacb.com/smrt-science/smrt-sequencing/hifi-reads-for-highly-accurate-long-read-sequencing/) metagenome data (both synthetic and real).
 
 The following assemblers are analyzed:
 
@@ -173,9 +173,9 @@ Usage: metabat2
 In here, we will be evaluate the assemblies using [CheckM](https://github.com/Ecogenomics/CheckM)[^fn7]. 
 
 Some convention,
-- Near-complete: > 90\% checkM completeness score & < 5\% contamination score.
-- High-quality:  > 70\% complete & < 10\% contaminated.
-- Medium-quality: > 50\% complete & QS > 50. 
+- Near-complete bin: $\geq 90\%$ checkM completeness score & $\leq 5\%$ contamination score.
+- High-quality:  $\geq 70\%$ complete & $\leq 10\%$ contaminated.
+- Medium-quality: QS $> 50\%$. 
 
 where QS (quality score) is given by `completeness-(5*contamination)`.
 
@@ -266,10 +266,13 @@ Usage: busco
 
 ## 2.4 Vizualization 
 
-A [Bandage](https://github.com/rrwick/Bandage)[^fn9] plot of chicken's primary contig graph.
-<p align="center">
- ![Graph](https://github.com/Shao-Group/metagenome-analysis/blob/master/plots/chicken/chicken_hifiasm_graph.png?raw=true)
-</p>
+
+For vizualization of complete circular contig from the, [Bandage](https://github.com/rrwick/Bandage)[^fn9] was used.
+
+Here's a Bandage plot of chicken's primary contig graph.
+
+![Graph](/plots/chicken/chicken_flye_graph.png)
+
 
 | **Assembler** | **Dataset**| **Node count**| **Edge count**| **Median depth** | 
 |:-------------:|:-----------:|:---------------|:-------------:|:------------------:
